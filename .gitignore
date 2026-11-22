@@ -1,0 +1,28 @@
+# Never commit real guest data or anything copied from Sox Box
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.xlsm
+*.ods
+*.har
+*.sqlite
+*.db
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.webp
+cookies.txt
+
+# Credentials
+.env
+.env.*
+*.pem
+*.key
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
