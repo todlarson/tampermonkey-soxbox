@@ -2,6 +2,9 @@
 
 Tampermonkey userscripts used by our team on Sox Box (FoodBank Manager) at https://dsfp.soxbox.co/.
 
+The repo is **public**. Pull requests, issues, projects, wiki and discussions are turned off,
+and interactions are limited to collaborators. Commit directly to `main`; never open PRs.
+
 ## Privacy rules (most important)
 
 Sox Box holds guest data: names, birth dates, addresses, phone numbers, household members.
@@ -22,9 +25,11 @@ None of it may enter this repo, its commit messages, issues or PRs.
 ## Script conventions
 
 - One file per script: `<name>.user.js` in the repo root, listed in the README table with an
-  install link (`https://github.com/todlarson/tampermonkey-soxbox/raw/main/<name>.user.js`).
+  install link (`https://raw.githubusercontent.com/todlarson/tampermonkey-soxbox/main/<name>.user.js`).
 - Header: `@match https://dsfp.soxbox.co/*`, `@grant none`, `@run-at document-idle`,
-  `@namespace https://dsfp.soxbox.co/`. Bump `@version` on every change.
+  `@namespace https://dsfp.soxbox.co/`, `@homepageURL` (the repo), and `@updateURL` +
+  `@downloadURL` set to the raw URL above. Bump `@version` on every change: Tampermonkey
+  only auto-updates when the version increases.
 - Wrap everything in an IIFE. With `@grant none`, page globals (`jQuery`) are on `window`.
 - Menu: put new pages under **Reports › TamperMonkey »**. Copy `getTamperMonkeyMenu()` from
   `birthday-box.user.js`; it finds `#tm-reports-menu` or creates it by cloning the

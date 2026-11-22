@@ -1,11 +1,14 @@
 // ==UserScript==
 // @name         Birthday Box
 // @namespace    https://dsfp.soxbox.co/
-// @version      1.1.0
+// @version      1.1.1
 // @description  Adds a "Birthday Box" report to Sox Box: children in each household with a birthday in the next N weeks.
 // @match        https://dsfp.soxbox.co/*
 // @grant        none
 // @run-at       document-idle
+// @homepageURL  https://github.com/todlarson/tampermonkey-soxbox
+// @updateURL    https://raw.githubusercontent.com/todlarson/tampermonkey-soxbox/main/birthday-box.user.js
+// @downloadURL  https://raw.githubusercontent.com/todlarson/tampermonkey-soxbox/main/birthday-box.user.js
 // ==/UserScript==
 
 /*

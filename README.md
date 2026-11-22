@@ -13,16 +13,19 @@ a script finds `#tm-reports-menu` and appends its item, creating the submenu onl
 
 ## Install / update
 
-**[Install Birthday Box](https://github.com/todlarson/tampermonkey-soxbox/raw/main/birthday-box.user.js)**
-— with Tampermonkey installed, opening this link shows its install/update screen.
+**[Install Birthday Box](https://raw.githubusercontent.com/todlarson/tampermonkey-soxbox/main/birthday-box.user.js)**
+— with Tampermonkey installed, opening this link shows its install screen.
 
-> This repo is private. The link only works in a browser signed in to GitHub with access to the repo:
-> GitHub redirects it to a short-lived, token-signed `raw.githubusercontent.com` URL. The plain
-> `raw.githubusercontent.com/...` URL returns 404, and Tampermonkey can't auto-update from it.
-> If the installer doesn't open, install manually instead.
+Tampermonkey then checks that same URL for updates (`@updateURL` / `@downloadURL`) and installs
+new versions automatically, so team members only install once.
 
-Manual: in Tampermonkey, **Create a new script** (or open the existing one), paste the whole file, save.
-Bump `@version` when changing a script so Tampermonkey sees it as an update.
+Manual: in Tampermonkey, **Create a new script**, paste the whole file, save.
+
+## Contributing
+
+This repo doesn't accept pull requests or issues; they're turned off. Changes are committed
+directly to `main` by the maintainer. Bump `@version` on every change, or Tampermonkey won't
+pick up the update.
 
 ## Birthday Box
 
