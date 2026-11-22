@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Team Zip Codes
 // @namespace    https://dsfp.soxbox.co/
-// @version      1.1.0
+// @version      1.2.0
 // @description  Adds a "Team Zip Codes" report to Sox Box: a pie chart of how many team members live in each zip code.
 // @match        https://dsfp.soxbox.co/*
 // @grant        none
@@ -122,10 +122,12 @@
     return '(invalid zip)';
   }
 
-  function countByZip(members) {
+  // excludeZip (optional): a normalized zip to leave out of the counts entirely.
+  function countByZip(members, excludeZip) {
     var counts = {}, total = 0;
     members.forEach(function (m) {
       var zip = normalizeZip(m['Physical Zip']);
+      if (excludeZip && zip === excludeZip) return;
       counts[zip] = (counts[zip] || 0) + 1;
       total++;
     });
@@ -190,7 +192,7 @@
     '#tzc details{margin-top:1em}',
     '#tzc summary{cursor:pointer;font-weight:bold}',
     '@media print{body *{visibility:hidden}#tzc,#tzc *{visibility:visible}#tzc{position:absolute;left:0;top:0;width:100%}' +
-      '#tzc .tzc-actions{display:none}}'
+      '#tzc .tzc-form,#tzc .tzc-actions{display:none}}'
   ].join('\n');
 
   function el(tag, attrs, children) {
@@ -248,15 +250,16 @@
     return { node: root, highlight: highlight };
   }
 
-  function renderResults(out, members) {
+  function renderResults(out, members, excludeZip) {
     out.innerHTML = '';
-    var data = countByZip(members);
+    var data = countByZip(members, excludeZip);
     var slices = toSlices(data.rows);
     var realZips = data.rows.filter(function (r) { return /^\d{5}$/.test(r.zip); }).length;
 
     out.appendChild(el('h2', { text: 'Team members by zip code' }));
     out.appendChild(el('p', { class: 'tzc-hint', text: fmt(data.total) + ' team members in ' + realZips + ' zip codes, as of ' +
-      new Date().toLocaleDateString() + '. The ' + Math.min(TOP_SLICES, realZips) + ' largest zips have their own slice.' }));
+      new Date().toLocaleDateString() + '. The ' + Math.min(TOP_SLICES, realZips) + ' largest zips have their own slice.' +
+      (excludeZip ? ' Excluding zip code ' + excludeZip + ' (' + fmt(members.length - data.total) + ' team members).' : '') }));
     if (!data.total) { out.appendChild(el('p', { text: 'No team members found.' })); return; }
 
     var tip = el('div', { class: 'tzc-tip', role: 'tooltip' });
@@ -300,13 +303,18 @@
     if (heading) { heading.setAttribute('data-tzc-title', heading.textContent); heading.textContent = 'Team Zip Codes'; }
     if (!document.getElementById('tzc-style')) document.head.appendChild(el('style', { id: 'tzc-style', text: CSS }));
 
+    var exclude = el('select', { id: 'tzc-exclude', disabled: 'disabled' }, [el('option', { value: '', text: 'None' })]);
+    var rerun = el('input', { type: 'submit', value: 'Re-run Report', class: 'btn btn-blue', disabled: 'disabled' });
+    var form = el('form', { class: 'tzc-form' }, [
+      el('label', { for: 'tzc-exclude', text: 'Exclude zip code: ' }), exclude, ' ', rerun
+    ]);
     var printBtn = el('button', { type: 'button', text: 'Print' });
     var actions = el('div', { class: 'tzc-actions', style: 'display:none;margin:1em 0' }, [printBtn]);
     var out = el('div', { id: 'tzc-out' });
     var section = el('section', { id: 'tzc', class: 'column width8 first' }, [
       el('h2', { text: 'Team Zip Codes' }),
       el('p', { class: 'tzc-hint', text: 'Uses current Team Export data from Sox Box. Nothing is downloaded or stored.' }),
-      actions, out
+      form, actions, out
     ]);
 
     Array.prototype.forEach.call(wrapper.children, function (c) {
@@ -315,11 +323,37 @@
     });
     wrapper.appendChild(section);
 
+    // Fill the dropdown with every zip in the data, most team members first, keeping the current choice.
+    function fillZipOptions(members) {
+      var chosen = exclude.value;
+      var rows = countByZip(members).rows; // already sorted by count, largest first
+      exclude.innerHTML = '';
+      exclude.appendChild(el('option', { value: '', text: 'None' }));
+      rows.forEach(function (r) {
+        exclude.appendChild(el('option', { value: r.zip, text: r.zip + ' (' + fmt(r.count) + ')' }));
+      });
+      exclude.value = rows.some(function (r) { return r.zip === chosen; }) ? chosen : '';
+    }
+
+    function run() {
+      rerun.disabled = true;
+      exclude.disabled = true;
+      actions.style.display = 'none';
+      out.innerHTML = '';
+      out.appendChild(el('p', { text: 'Loading Team Export…' }));
+      fetchTeam()
+        .then(function (members) {
+          fillZipOptions(members);
+          renderResults(out, members, exclude.value);
+          actions.style.display = '';
+        })
+        .catch(function (err) { out.innerHTML = ''; out.appendChild(el('p', { class: 'tzc-err', text: 'ERROR: ' + err.message })); })
+        .then(function () { rerun.disabled = false; exclude.disabled = false; });
+    }
+
     printBtn.addEventListener('click', function () { window.print(); });
-    out.appendChild(el('p', { text: 'Loading Team Export…' }));
-    fetchTeam()
-      .then(function (members) { renderResults(out, members); actions.style.display = ''; })
-      .catch(function (err) { out.innerHTML = ''; out.appendChild(el('p', { class: 'tzc-err', text: 'ERROR: ' + err.message })); });
+    form.addEventListener('submit', function (e) { e.preventDefault(); run(); });
+    run();
   }
 
   function unrenderPage() {

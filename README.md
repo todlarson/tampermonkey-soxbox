@@ -72,6 +72,8 @@ pick up the update.
 - "All zip codes" lists every zip, ranked, with a bar for exact comparison.
 - Zips are cleaned up before counting: ZIP+4 is cut to 5 digits, a 4-digit zip gets its dropped
   leading zero back, anything else counts as "(invalid zip)" or "(no zip)".
+- **Exclude zip code** (default None): pick a zip from the dropdown, which lists every zip with
+  its count, most team members first, then click **Re-run Report** to rebuild the chart without it.
 - Every team member in Team Export is counted; the "Banned from Volunteering" flag is ignored.
 
 ## Privacy
