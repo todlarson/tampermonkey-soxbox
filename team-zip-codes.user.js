@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Team Zip Codes
 // @namespace    https://dsfp.soxbox.co/
-// @version      1.0.0
+// @version      1.0.1
 // @description  Adds a "Team Zip Codes" report to Sox Box: a pie chart of how many team members live in each zip code.
 // @match        https://dsfp.soxbox.co/*
 // @grant        none
@@ -303,9 +303,11 @@
     if (!document.getElementById('tzc-style')) document.head.appendChild(el('style', { id: 'tzc-style', text: CSS }));
 
     var banned = el('input', { type: 'checkbox', id: 'tzc-banned' });
+    var bannedNote = el('span', { class: 'tzc-hint' });
     var submit = el('input', { type: 'submit', value: 'Run Report', class: 'btn btn-blue' });
     var form = el('form', { class: 'tzc-form' }, [
-      el('p', {}, [banned, ' ', el('label', { for: 'tzc-banned', text: 'Include team members banned from volunteering' })]),
+      el('p', {}, [banned, ' ', el('label', { for: 'tzc-banned', text: 'Include team members banned from volunteering' }),
+        bannedNote]),
       el('p', {}, [submit])
     ]);
     var printBtn = el('button', { type: 'button', text: 'Print' });
@@ -330,7 +332,14 @@
       out.innerHTML = '';
       out.appendChild(el('p', { text: 'Loading Team Export…' }));
       (members ? Promise.resolve(members) : fetchTeam())
-        .then(function (m) { members = m; renderResults(out, m, banned.checked); actions.style.display = ''; })
+        .then(function (m) {
+          members = m;
+          // Show how many are banned, so it's clear why the checkbox may change nothing.
+          var n = m.filter(function (x) { return String(x['Banned from Volunteering']).trim() === 'Yes'; }).length;
+          bannedNote.textContent = ' (' + (n ? fmt(n) : 'none') + ' currently banned)';
+          renderResults(out, m, banned.checked);
+          actions.style.display = '';
+        })
         .catch(function (err) { out.innerHTML = ''; out.appendChild(el('p', { class: 'tzc-err', text: 'ERROR: ' + err.message })); })
         .then(function () { submit.disabled = false; });
     }
