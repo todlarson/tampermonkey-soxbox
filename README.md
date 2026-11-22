@@ -10,6 +10,7 @@ a script finds `#tm-reports-menu` and appends its item, creating the submenu onl
 | Script | What it does |
 |---|---|
 | [`birthday-box.user.js`](birthday-box.user.js) | **Birthday Box**: children in each household with a birthday in the next N weeks. Replaces the Google Sites Birthday Box (upload "Guest Data" CSV) by pulling the Guest Data export directly from Sox Box. |
+| [`team-zip-codes.user.js`](team-zip-codes.user.js) | **Team Zip Codes**: pie chart of how many team members live in each zip code, from the Team Export report. |
 
 ## One-time browser setup
 
@@ -37,8 +38,10 @@ If **Reports › TamperMonkey** is missing on `dsfp.soxbox.co`, check:
 
 ## Install / update
 
-**[Install Birthday Box](https://raw.githubusercontent.com/todlarson/tampermonkey-soxbox/main/birthday-box.user.js)**
-— with Tampermonkey installed, opening this link shows its install screen.
+- **[Install Birthday Box](https://raw.githubusercontent.com/todlarson/tampermonkey-soxbox/main/birthday-box.user.js)**
+- **[Install Team Zip Codes](https://raw.githubusercontent.com/todlarson/tampermonkey-soxbox/main/team-zip-codes.user.js)**
+
+With Tampermonkey installed, opening a link shows its install screen.
 
 Tampermonkey then checks that same URL for updates (`@updateURL` / `@downloadURL`) and installs
 new versions automatically, so team members only install once.
@@ -59,6 +62,17 @@ pick up the update.
   "Guest Name (Relationship - age)" grouped by date, youngest first.
 - Additions: child's name and "turning N", link to the guest profile, Print button,
   dates ordered correctly across New Year.
+
+## Team Zip Codes
+
+- Open: Reports › TamperMonkey › Team Zip Codes (`/reports/team/team-export/#team-zip-codes`).
+  The report runs as soon as the page opens.
+- Pie chart: the 7 largest zip codes each get a slice; all others fold into a gray "Other" slice.
+  Hover a slice or legend row for its count and share.
+- "All zip codes" lists every zip, ranked, with a bar for exact comparison.
+- Zips are cleaned up before counting: ZIP+4 is cut to 5 digits, a 4-digit zip gets its dropped
+  leading zero back, anything else counts as "(invalid zip)" or "(no zip)".
+- Team members banned from volunteering are left out unless you tick the checkbox.
 
 ## Privacy
 
