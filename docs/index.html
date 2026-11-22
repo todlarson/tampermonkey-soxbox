@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sox Box Add-ons</title>
+<meta name="description" content="Extra reports for Sox Box (dsfp.soxbox.co), installed with the Tampermonkey browser extension.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐵</text></svg>">
+<style>
+  :root {
+    --bg: #f6f5f2;
+    --surface: #ffffff;
+    --text: #1d1d1b;
+    --muted: #5c5b56;
+    --border: #e2e0da;
+    --accent: #2a78d6;
+    --accent-ink: #ffffff;
+    --accent-hover: #1c5cab;
+    --header: #2b2b2b;
+    --header-ink: #f2f2f2;
+    --code-bg: #efeee9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #161615;
+      --surface: #1f1f1d;
+      --text: #efeeea;
+      --muted: #b3b2aa;
+      --border: #34332f;
+      --accent: #3987e5;
+      --accent-ink: #ffffff;
+      --accent-hover: #5598e7;
+      --header: #0f0f0e;
+      --header-ink: #efeeea;
+      --code-bg: #2a2a27;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  header { background: var(--header); color: var(--header-ink); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+  header .wrap { padding-top: 28px; padding-bottom: 28px; }
+  header h1 { margin: 0; font-size: 28px; line-height: 1.2; }
+  header h1 .icon { font-size: 34px; vertical-align: -3px; margin-right: 6px; }
+  header p { margin: 8px 0 0; color: var(--header-ink); opacity: .8; }
+  main { padding: 28px 0 48px; }
+  h2 { font-size: 20px; margin: 36px 0 12px; }
+  h2:first-child { margin-top: 0; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin: 12px 0;
+  }
+  .card h3 { margin: 0 0 4px; font-size: 18px; }
+  .card p { margin: 0 0 12px; color: var(--muted); }
+  .card .where { font-size: 14px; color: var(--muted); margin-bottom: 14px; }
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--accent-ink);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 9px 18px;
+    border-radius: 8px;
+  }
+  .btn:hover, .btn:focus-visible { background: var(--accent-hover); }
+  ol, ul { padding-left: 22px; margin: 8px 0; }
+  li { margin: 6px 0; }
+  .browser { margin: 14px 0 4px; font-weight: 600; }
+  code {
+    background: var(--code-bg);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 14px;
+    word-break: break-all;
+  }
+  .note { color: var(--muted); font-size: 14px; }
+  a { color: var(--accent); }
+  footer { color: var(--muted); font-size: 14px; border-top: 1px solid var(--border); padding: 18px 0 40px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1><span class="icon" aria-hidden="true">🐵</span>Sox Box Add-ons</h1>
+    <p>Extra reports for Sox Box at dsfp.soxbox.co. They appear under <strong>Reports › 🐵 TamperMonkey</strong>.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <h2>Step 1: Set up your browser (once)</h2>
+  <div class="card">
+    <p style="color:var(--text)">The add-ons run inside a free browser extension called Tampermonkey.
+      You only do this once per browser.</p>
+    <ol>
+      <li>Install <a href="https://www.tampermonkey.net/" target="_blank" rel="noopener">Tampermonkey</a> for your browser.</li>
+      <li>Allow it to run add-ons:
+        <div class="browser">Chrome</div>
+        Go to <code>chrome://extensions</code>, click <strong>Details</strong> on Tampermonkey, and turn on
+        <strong>Allow User Scripts</strong>. If you don't see that switch, turn on <strong>Developer mode</strong>
+        at the top right of the same page instead.
+        <div class="browser">Edge</div>
+        Go to <code>edge://extensions</code> and turn on <strong>Developer mode</strong>. If Tampermonkey's
+        <strong>Details</strong> show <strong>Allow User Scripts</strong>, turn that on too.
+        <div class="browser">Firefox</div>
+        Nothing extra to do.
+      </li>
+    </ol>
+  </div>
+
+  <h2>Step 2: Install the reports you want</h2>
+  <p class="note">Click <strong>Install</strong>, then click <strong>Install</strong> again on the Tampermonkey screen
+    that opens. Updates install automatically after that.</p>
+
+  <div class="card">
+    <h3>Birthday Box</h3>
+    <p>Children in each household with a birthday in the next few weeks, grouped by date, ready to print.</p>
+    <div class="where">Reports › 🐵 TamperMonkey › Birthday Box</div>
+    <a class="btn" href="https://raw.githubusercontent.com/todlarson/tampermonkey-soxbox/main/birthday-box.user.js">Install Birthday Box</a>
+  </div>
+
+  <div class="card">
+    <h3>Team Zip Codes</h3>
+    <p>Pie chart of how many team members live in each zip code, with a full list. You can leave out one zip code.</p>
+    <div class="where">Reports › 🐵 TamperMonkey › Team Zip Codes</div>
+    <a class="btn" href="https://raw.githubusercontent.com/todlarson/tampermonkey-soxbox/main/team-zip-codes.user.js">Install Team Zip Codes</a>
+  </div>
+
+  <h2>Not showing up?</h2>
+  <div class="card">
+    <ul>
+      <li>Reload the Sox Box page after installing.</li>
+      <li>Check that <strong>Allow User Scripts</strong> (or Developer mode) is on, as in Step 1.</li>
+      <li>Open the Tampermonkey dashboard and make sure the report is switched on.</li>
+      <li>On a Sox Box page, the Tampermonkey toolbar icon should show a number. No number means no add-ons are running there.</li>
+    </ul>
+  </div>
+
+  <h2>Your data</h2>
+  <div class="card">
+    <p style="margin:0">The reports read data from Sox Box while you're signed in and show it on your screen only.
+      Nothing is downloaded, saved, or sent anywhere else.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    Source and details for maintainers:
+    <a href="https://github.com/todlarson/tampermonkey-soxbox">github.com/todlarson/tampermonkey-soxbox</a>
+  </div>
+</footer>
+</body>
+</html>

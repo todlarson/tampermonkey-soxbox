@@ -24,8 +24,11 @@ None of it may enter this repo, its commit messages, issues or PRs.
 
 ## Script conventions
 
-- One file per script: `<name>.user.js` in the repo root, listed in the README table with an
-  install link (`https://raw.githubusercontent.com/todlarson/tampermonkey-soxbox/main/<name>.user.js`).
+- One file per script: `<name>.user.js` in the repo root. For each new script, add a row to the
+  README table and a card to `docs/index.html` (the team's install page on GitHub Pages) with a
+  plain-language description, its menu path, and an Install button linking to
+  `https://raw.githubusercontent.com/todlarson/tampermonkey-soxbox/main/<name>.user.js`.
+  Write the page for non-technical volunteers; keep maintainer details in the README.
 - Header: `@match https://dsfp.soxbox.co/*`, `@grant none`, `@run-at document-idle`,
   `@namespace https://dsfp.soxbox.co/`, `@homepageURL` (the repo), and `@updateURL` +
   `@downloadURL` set to the raw URL above. Bump `@version` on every change: Tampermonkey

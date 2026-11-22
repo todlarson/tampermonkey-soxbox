@@ -2,7 +2,10 @@
 
 Tampermonkey userscripts for Sox Box (FoodBank Manager) at https://dsfp.soxbox.co/.
 
-Scripts add their pages under **Reports › TamperMonkey »**. That submenu is shared:
+> **Team members:** install from **https://todlarson.github.io/tampermonkey-soxbox/**.
+> This README is for maintaining the scripts.
+
+Scripts add their pages under **Reports › 🐵 TamperMonkey »**. That submenu is shared:
 a script finds `#tm-reports-menu` and appends its item, creating the submenu only if it's missing.
 
 ## Scripts
@@ -12,41 +15,17 @@ a script finds `#tm-reports-menu` and appends its item, creating the submenu onl
 | [`birthday-box.user.js`](birthday-box.user.js) | **Birthday Box**: children in each household with a birthday in the next N weeks. Replaces the Google Sites Birthday Box (upload "Guest Data" CSV) by pulling the Guest Data export directly from Sox Box. |
 | [`team-zip-codes.user.js`](team-zip-codes.user.js) | **Team Zip Codes**: pie chart of how many team members live in each zip code, from the Team Export report. |
 
-## One-time browser setup
+## Install page
 
-These scripts are userscripts: they run inside the [Tampermonkey](https://www.tampermonkey.net/)
-extension. Do this once per browser; every script installed afterwards works without repeating it.
+[`docs/index.html`](docs/index.html) is the team-facing install page, published with GitHub Pages
+(main branch, `/docs` folder) at https://todlarson.github.io/tampermonkey-soxbox/. It holds the
+one-time browser setup, an Install button per script, and troubleshooting. Pushing to `main`
+republishes it.
 
-1. Install the Tampermonkey extension for your browser.
-2. Allow it to run userscripts:
-   - **Chrome:** go to `chrome://extensions`, click **Details** on Tampermonkey, and turn on
-     **Allow User Scripts**. (Chrome versions before 138 have no such toggle: turn on
-     **Developer mode** at the top right of `chrome://extensions` instead.)
-   - **Edge:** go to `edge://extensions` and turn on **Developer mode**. Newer versions may also
-     show **Allow User Scripts** under Tampermonkey's **Details**; turn that on too.
-   - **Firefox:** nothing extra.
-
-### Not showing up?
-
-If **Reports › TamperMonkey** is missing on `dsfp.soxbox.co`, check:
-
-- **Allow User Scripts** (or Developer mode) is on.
-- The script is enabled in Tampermonkey's dashboard.
-- Tampermonkey's toolbar icon shows a number badge on the Sox Box page. No badge means no scripts
-  are running there.
-- Reload the Sox Box page after installing or changing anything.
-
-## Install / update
-
-- **[Install Birthday Box](https://raw.githubusercontent.com/todlarson/tampermonkey-soxbox/main/birthday-box.user.js)**
-- **[Install Team Zip Codes](https://raw.githubusercontent.com/todlarson/tampermonkey-soxbox/main/team-zip-codes.user.js)**
-
-With Tampermonkey installed, opening a link shows its install screen.
-
-Tampermonkey then checks that same URL for updates (`@updateURL` / `@downloadURL`) and installs
-new versions automatically, so team members only install once.
-
-Manual: in Tampermonkey, **Create a new script**, paste the whole file, save.
+Install buttons link to each script's raw URL
+(`https://raw.githubusercontent.com/todlarson/tampermonkey-soxbox/main/<name>.user.js`).
+Tampermonkey checks that same URL for updates (`@updateURL` / `@downloadURL`) and installs new
+versions automatically, as long as `@version` goes up.
 
 ## Contributing
 
