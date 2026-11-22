@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Team Zip Codes
 // @namespace    https://dsfp.soxbox.co/
-// @version      1.0.1
+// @version      1.1.0
 // @description  Adds a "Team Zip Codes" report to Sox Box: a pie chart of how many team members live in each zip code.
 // @match        https://dsfp.soxbox.co/*
 // @grant        none
@@ -24,7 +24,7 @@
   var ROUTE_PATH = '/reports/team/team-export/';
   var ROUTE_HASH = '#team-zip-codes';
   var EXPORT_URL = '/reports/team/team-export/export/';
-  var EXPORT_COLS = ['volunteers.id', 'volunteers.zipcode', 'volunteers.blackball'];
+  var EXPORT_COLS = ['volunteers.id', 'volunteers.zipcode'];
   var MENU_TEMPLATE_LINK = '/reports/guests/guests/'; // Reports > Guest > Guest Data: template for the shared menu
   var TOP_SLICES = 7; // biggest zips get their own slice; the rest fold into "Other"
 
@@ -122,10 +122,9 @@
     return '(invalid zip)';
   }
 
-  function countByZip(members, includeBanned) {
+  function countByZip(members) {
     var counts = {}, total = 0;
     members.forEach(function (m) {
-      if (!includeBanned && String(m['Banned from Volunteering']).trim() === 'Yes') return;
       var zip = normalizeZip(m['Physical Zip']);
       counts[zip] = (counts[zip] || 0) + 1;
       total++;
@@ -170,7 +169,6 @@
     '#tzc h2{margin-bottom:.5em}',
     '#tzc .tzc-hint{color:#666;font-style:italic}',
     '#tzc .tzc-err{color:#b00020;font-weight:bold}',
-    '#tzc .tzc-form p{margin:.6em 0}',
     '#tzc .tzc-chart{display:flex;flex-wrap:wrap;gap:24px;align-items:center;margin:1em 0}',
     '#tzc .tzc-pie{width:280px;height:280px;flex:none}',
     '#tzc .tzc-pie path{stroke:#fff;stroke-width:2;cursor:default}',
@@ -192,7 +190,7 @@
     '#tzc details{margin-top:1em}',
     '#tzc summary{cursor:pointer;font-weight:bold}',
     '@media print{body *{visibility:hidden}#tzc,#tzc *{visibility:visible}#tzc{position:absolute;left:0;top:0;width:100%}' +
-      '#tzc .tzc-form,#tzc .tzc-actions{display:none}}'
+      '#tzc .tzc-actions{display:none}}'
   ].join('\n');
 
   function el(tag, attrs, children) {
@@ -250,9 +248,9 @@
     return { node: root, highlight: highlight };
   }
 
-  function renderResults(out, members, includeBanned) {
+  function renderResults(out, members) {
     out.innerHTML = '';
-    var data = countByZip(members, includeBanned);
+    var data = countByZip(members);
     var slices = toSlices(data.rows);
     var realZips = data.rows.filter(function (r) { return /^\d{5}$/.test(r.zip); }).length;
 
@@ -302,21 +300,13 @@
     if (heading) { heading.setAttribute('data-tzc-title', heading.textContent); heading.textContent = 'Team Zip Codes'; }
     if (!document.getElementById('tzc-style')) document.head.appendChild(el('style', { id: 'tzc-style', text: CSS }));
 
-    var banned = el('input', { type: 'checkbox', id: 'tzc-banned' });
-    var bannedNote = el('span', { class: 'tzc-hint' });
-    var submit = el('input', { type: 'submit', value: 'Run Report', class: 'btn btn-blue' });
-    var form = el('form', { class: 'tzc-form' }, [
-      el('p', {}, [banned, ' ', el('label', { for: 'tzc-banned', text: 'Include team members banned from volunteering' }),
-        bannedNote]),
-      el('p', {}, [submit])
-    ]);
     var printBtn = el('button', { type: 'button', text: 'Print' });
     var actions = el('div', { class: 'tzc-actions', style: 'display:none;margin:1em 0' }, [printBtn]);
     var out = el('div', { id: 'tzc-out' });
     var section = el('section', { id: 'tzc', class: 'column width8 first' }, [
       el('h2', { text: 'Team Zip Codes' }),
       el('p', { class: 'tzc-hint', text: 'Uses current Team Export data from Sox Box. Nothing is downloaded or stored.' }),
-      form, actions, out
+      actions, out
     ]);
 
     Array.prototype.forEach.call(wrapper.children, function (c) {
@@ -325,28 +315,11 @@
     });
     wrapper.appendChild(section);
 
-    var members = null; // cached for this page view only, so toggling the checkbox doesn't refetch
-    function run() {
-      submit.disabled = true;
-      actions.style.display = 'none';
-      out.innerHTML = '';
-      out.appendChild(el('p', { text: 'Loading Team Export…' }));
-      (members ? Promise.resolve(members) : fetchTeam())
-        .then(function (m) {
-          members = m;
-          // Show how many are banned, so it's clear why the checkbox may change nothing.
-          var n = m.filter(function (x) { return String(x['Banned from Volunteering']).trim() === 'Yes'; }).length;
-          bannedNote.textContent = ' (' + (n ? fmt(n) : 'none') + ' currently banned)';
-          renderResults(out, m, banned.checked);
-          actions.style.display = '';
-        })
-        .catch(function (err) { out.innerHTML = ''; out.appendChild(el('p', { class: 'tzc-err', text: 'ERROR: ' + err.message })); })
-        .then(function () { submit.disabled = false; });
-    }
     printBtn.addEventListener('click', function () { window.print(); });
-    form.addEventListener('submit', function (e) { e.preventDefault(); run(); });
-    banned.addEventListener('change', function () { if (members) run(); });
-    run();
+    out.appendChild(el('p', { text: 'Loading Team Export…' }));
+    fetchTeam()
+      .then(function (members) { renderResults(out, members); actions.style.display = ''; })
+      .catch(function (err) { out.innerHTML = ''; out.appendChild(el('p', { class: 'tzc-err', text: 'ERROR: ' + err.message })); });
   }
 
   function unrenderPage() {

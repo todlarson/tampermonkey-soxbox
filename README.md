@@ -72,7 +72,7 @@ pick up the update.
 - "All zip codes" lists every zip, ranked, with a bar for exact comparison.
 - Zips are cleaned up before counting: ZIP+4 is cut to 5 digits, a 4-digit zip gets its dropped
   leading zero back, anything else counts as "(invalid zip)" or "(no zip)".
-- Team members banned from volunteering are left out unless you tick the checkbox.
+- Every team member in Team Export is counted; the "Banned from Volunteering" flag is ignored.
 
 ## Privacy
 
