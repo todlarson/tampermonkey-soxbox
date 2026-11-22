@@ -31,8 +31,9 @@ None of it may enter this repo, its commit messages, issues or PRs.
   `@downloadURL` set to the raw URL above. Bump `@version` on every change: Tampermonkey
   only auto-updates when the version increases.
 - Wrap everything in an IIFE. With `@grant none`, page globals (`jQuery`) are on `window`.
-- Menu: put new pages under **Reports › 🐒 TamperMonkey »**. Whichever script runs first creates
-  the menu, so keep the label exactly `'🐒 TamperMonkey'`. Copy `getTamperMonkeyMenu()` from
+- Menu: put new pages under **Reports › 🐵 TamperMonkey »**. Whichever script runs first creates
+  the menu, so keep the label identical: a 16px 🐵 (`'🐵'`) span, since smaller or
+  darker emoji like 🐒 disappear on the dark gray (#444) menu, then " TamperMonkey". Copy `getTamperMonkeyMenu()` from
   `birthday-box.user.js`; it finds `#tm-reports-menu` or creates it by cloning the
   Reports › Guest » submenu with `jQuery(...).clone(true)` so Superfish hover keeps working.
   Append your item by cloning `submenu.tmItemTemplate || submenu.querySelector('li')`.

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Birthday Box
 // @namespace    https://dsfp.soxbox.co/
-// @version      1.1.2
+// @version      1.1.3
 // @description  Adds a "Birthday Box" report to Sox Box: children in each household with a birthday in the next N weeks.
 // @match        https://dsfp.soxbox.co/*
 // @grant        none
@@ -47,8 +47,11 @@
     var label = group.querySelector('a');
     label.id = 'tm-reports-label';
     var labelText = Array.prototype.find.call(label.childNodes, function (n) { return n.nodeType === 3 && n.nodeValue.trim(); });
-    var labelValue = '🐒 TamperMonkey'; // monkey emoji
-    if (labelText) labelText.nodeValue = labelValue; else label.insertBefore(document.createTextNode(labelValue), label.firstChild);
+    // Monkey-face emoji, enlarged so it stays visible on the dark gray menu.
+    var icon = el('span', { 'aria-hidden': 'true', style: 'font-size:16px;line-height:1;vertical-align:-2px', text: '🐵' });
+    var name = document.createTextNode(' TamperMonkey');
+    if (labelText) label.replaceChild(name, labelText); else label.insertBefore(name, label.firstChild);
+    label.insertBefore(icon, name);
 
     var submenu = group.querySelector('ul');
     submenu.id = 'tm-reports-menu';
