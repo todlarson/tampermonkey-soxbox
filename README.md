@@ -2,7 +2,7 @@
 
 Tampermonkey userscripts for Sox Box (FoodBank Manager) at https://dsfp.soxbox.co/.
 
-> **Team members:** install from **https://todlarson.github.io/tampermonkey-soxbox/**.
+> **Team members:** install from **https://tampermonkey-soxbox.dsfp.org/**.
 > This README is for maintaining the scripts.
 
 Scripts add their pages under **Reports › 🐵 TamperMonkey »**. That submenu is shared:
@@ -17,15 +17,17 @@ a script finds `#tm-reports-menu` and appends its item, creating the submenu onl
 
 ## Install page
 
-[`docs/index.html`](docs/index.html) is the team-facing install page, published with GitHub Pages
-(main branch, `/docs` folder) at https://todlarson.github.io/tampermonkey-soxbox/. It holds the
-one-time browser setup, an Install button per script, and troubleshooting. Pushing to `main`
-republishes it.
+[`docs/index.html`](docs/index.html) is the team-facing install page: one-time browser setup, an
+Install button per script, and troubleshooting. It's served at https://tampermonkey-soxbox.dsfp.org/
+(GitHub Pages with a custom domain: a `tampermonkey-soxbox` CNAME record in dsfp.org's DNS).
 
-Install buttons link to each script's raw URL
-(`https://raw.githubusercontent.com/todlarson/tampermonkey-soxbox/main/<name>.user.js`).
-Tampermonkey checks that same URL for updates (`@updateURL` / `@downloadURL`) and installs new
-versions automatically, as long as `@version` goes up.
+[`.github/workflows/pages.yml`](.github/workflows/pages.yml) publishes `docs/` plus every
+`*.user.js` on each push to `main`, so each script lives at
+`https://tampermonkey-soxbox.dsfp.org/<name>.user.js`. Install buttons and the scripts'
+`@updateURL` / `@downloadURL` use that URL; Tampermonkey auto-updates whenever `@version` goes up.
+
+Keep the old raw GitHub copies of the scripts in the repo root: installs made before the move
+still check those URLs once, pick up the new `@updateURL`, and switch to the domain.
 
 ## Contributing
 

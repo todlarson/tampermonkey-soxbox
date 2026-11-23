@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name         Team Zip Codes
 // @namespace    https://dsfp.soxbox.co/
-// @version      1.2.0
+// @version      1.2.1
 // @description  Adds a "Team Zip Codes" report to Sox Box: a pie chart of how many team members live in each zip code.
 // @match        https://dsfp.soxbox.co/*
 // @grant        none
 // @run-at       document-idle
-// @homepageURL  https://github.com/todlarson/tampermonkey-soxbox
-// @updateURL    https://raw.githubusercontent.com/todlarson/tampermonkey-soxbox/main/team-zip-codes.user.js
-// @downloadURL  https://raw.githubusercontent.com/todlarson/tampermonkey-soxbox/main/team-zip-codes.user.js
+// @homepageURL  https://tampermonkey-soxbox.dsfp.org/
+// @updateURL    https://tampermonkey-soxbox.dsfp.org/team-zip-codes.user.js
+// @downloadURL  https://tampermonkey-soxbox.dsfp.org/team-zip-codes.user.js
 // ==/UserScript==
 
 /*

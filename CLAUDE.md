@@ -27,12 +27,15 @@ None of it may enter this repo, its commit messages, issues or PRs.
 - One file per script: `<name>.user.js` in the repo root. For each new script, add a row to the
   README table and a card to `docs/index.html` (the team's install page on GitHub Pages) with a
   plain-language description, its menu path, and an Install button linking to
-  `https://raw.githubusercontent.com/todlarson/tampermonkey-soxbox/main/<name>.user.js`.
+  `https://tampermonkey-soxbox.dsfp.org/<name>.user.js`.
   Write the page for non-technical volunteers; keep maintainer details in the README.
 - Header: `@match https://dsfp.soxbox.co/*`, `@grant none`, `@run-at document-idle`,
-  `@namespace https://dsfp.soxbox.co/`, `@homepageURL` (the repo), and `@updateURL` +
-  `@downloadURL` set to the raw URL above. Bump `@version` on every change: Tampermonkey
-  only auto-updates when the version increases.
+  `@namespace https://dsfp.soxbox.co/`, `@homepageURL https://tampermonkey-soxbox.dsfp.org/`, and
+  `@updateURL` + `@downloadURL` set to the script URL above. Never put GitHub/raw URLs or the
+  maintainer's username in scripts or the install page. Bump `@version` on every change:
+  Tampermonkey only auto-updates when the version increases.
+- Publishing: `.github/workflows/pages.yml` deploys `docs/` plus every `*.user.js` to GitHub Pages
+  (custom domain `tampermonkey-soxbox.dsfp.org`, DNS CNAME in dsfp.org) on each push to `main`.
 - Wrap everything in an IIFE. With `@grant none`, page globals (`jQuery`) are on `window`.
 - Menu: put new pages under **Reports › 🐵 TamperMonkey »**. Whichever script runs first creates
   the menu, so keep the label identical: a 16px 🐵 (`'🐵'`) span, since smaller or
